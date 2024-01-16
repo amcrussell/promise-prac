@@ -50,15 +50,25 @@ function createChirp(user, text, id) {
             }
         });
 
-    }).on('click', e => {
+    }).one('click', e => {
         if (e.target.id === 'close') return;
+        if(!$('#modal').hasClass('d-none')) return;
 
         let modal = $('#modal');
         let closeModal = $('#submitModal');
 
-        modal.css('display', 'absolute');
+        modal.toggleClass('d-none');
 
         closeModal.one('click', e => {
+            $.ajax({
+                type: "PUT",
+                url: "http://localhost:3000/api/chirps/" + id,
+                data: JSON.stringify({ user: $('#userModal').val(), text: $('#textModal').val() }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            modal.toggleClass('d-none');
             getChirps();
             $('#userModal').val('');
             $('#textModal').val('');
@@ -72,7 +82,7 @@ function createChirp(user, text, id) {
 function chirpContents(user, text, id) {
 
     return (`
-        <div data-modal-target="authentication-modal"  id=${id} class="container col-4">
+        <div id=${id} class="container col-8 bg-white border  border-5">
             <img id="close" src="images/close.png" alt="delete chirp" class="close" style="width: 15px"/>
             <div class="flex-column chirpBody">
                 <h1 id="chirpUserInline" class="border text-xl">@${user}</h1>
