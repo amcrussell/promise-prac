@@ -1,35 +1,76 @@
 const fs = require('fs');
 let chirps = { nextid: 0 };
 
-if(fs.existsSync('chirps.json')) {
+if (fs.existsSync('chirps.json')) {
     chirps = JSON.parse(fs.readFileSync('chirps.json'));
 }
 
-let getChirps = () => {
-    return Object.assign({}, chirps); //create a copy and return it
+// This evaluates to see if 0.25 > Math.random(), which goes from 0 to 0.99999999
+// That gives us about a 1 in 4 chance that an error should happen
+const requestShouldBreak = () => {
+    return 1 / 10 > Math.random();
+};
+
+let getChirps =  () => {
+
+    return new Promise((resolve, reject) => {
+        if (requestShouldBreak()) {
+            reject("error cant get all chirps at this moment");
+        } else {
+            resolve(Object.assign({}, chirps));
+        }
+    });
 }
 
 let getChirp = id => {
-    return Object.assign({}, chirps[id]); //create a copy and return it
+
+    return new Promise((resolve, reject) => {
+        if (requestShouldBreak()) {
+            reject(`error cant get chirp with id of ${id} at this moment`);
+        } else {
+            resolve(Object.assign({}, chirps[id]))
+        }
+    });
 }
 
 let createChirp = (chirp) => {
-    chirps[chirps.nextid++] = chirp;
-    writeChirps();
+    return new Promise((resolve, reject) => {
+        if (requestShouldBreak()) {
+            reject(`error: can not create chirp at this moment`);
+        } else {
+            chirps[chirps.nextid++] = chirp;
+            writeChirps();
+            resolve("successfully added chirp");
+        }
+    })
 };
 
 let updateChirp = (id, chirp) => {
-    chirps[id] = chirp;
-    writeChirps();
+    return new Promise((resolve, reject) => {
+        if (requestShouldBreak()) {
+            reject(`error: can not update chirp id:${id} at this moment`);
+        } else {
+            chirps[id] = chirp;
+            writeChirps();
+            resolve("successfully updated chirp");
+        }
+    })
 }
 
 let deleteChirp = id => {
-    delete chirps[id];
-    writeChirps();
+    return new Promise((resolve, reject) => {
+        if (requestShouldBreak()) {
+            reject(`error: can not delete chirp id:${id} at this moment`);
+        } else {
+            delete chirps[id];
+            writeChirps();
+            resolve("successfully deleted chirp");
+        }
+    })
 }
 
 let writeChirps = () => {
-    fs.writeFileSync('chirps.json', JSON.stringify(chirps));
+            fs.writeFileSync('chirps.json', JSON.stringify(chirps));
 };
 
 module.exports = {

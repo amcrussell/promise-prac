@@ -1,12 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>promise chirper</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 </head>
-<body>
-    
+
+<body class="bg-info">
+
+    <div class="chirpGen container flex">
+        <div class="header">
+            <h1 class="">Chirp Generator</h1>
+        </div>
+        <div class="">
+            <form>
+                <label class="" for="user">User:</label>
+                <input class="chirpUser" type="text" id="user" name="user"><br>
+                <label class="" for="text">Text:</label>
+                <input class="chirpText" type="text" id="text" name="text"><br>
+                <button class="btn btn-success submit">Chirp</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="chirpContainer container flex">
+
+    </div>
+
+    <div id="modal" class="d-none position-absolute  ">
+
+            <div class="container ">
+                
+                <form class="" action="#">
+                    <div>
+                        <label for="user" class="">Changed User</label>
+                        <input type="user" name="user" id="userModal" class="" required>
+                    </div>
+                    <div>
+                        <label for="text" class="">Changed
+                            text</label>
+                        <input type="text" name="text" id="textModal" class="" required>
+                    </div>
+                    <button type="submit" id="submitModal" class="">submit changes</button>
+                </form>
+            </div>
+
+    </div>
+
+
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="jquery/jquery.js"></script>
     <script src="app.js"></script>
 </body>
+
 </html>
